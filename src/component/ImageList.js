@@ -1,18 +1,18 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react';
 import Carousel from "./Carousel"
+// import { useNavigate } from 'react-router-dom';
 
 import ImageForm from './ImageForm';
 
 
-import AlbumList from './AlbumList';
-import App from '../App';
 const ImageList = ({ personalImageAlbum, updatePeronalAlbum }) => {
   const [isImageFormVisible, setIsImageFormVisible] = useState(false);
   const [currentHoverIndex, setCurrentHoverIndex] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(null); // Track the image data to be edited
   const [isCarouselActive, setIsCarouselActive] = useState(false);
 
+  // const navigate = useNavigate();
 
 
   const togglePopup = () => {
@@ -21,8 +21,9 @@ const ImageList = ({ personalImageAlbum, updatePeronalAlbum }) => {
   };
 
   const handleBackButtonClick = () => {
-    // console.log("Back button clicked");
+    console.log("Back button clicked");
     window.history.go(-1);
+    // navigate(-1);
 
   };
 
@@ -60,7 +61,7 @@ const ImageList = ({ personalImageAlbum, updatePeronalAlbum }) => {
       }
       <div className="flex justify-around mt-4 items-center">
         <div className='inline-flex gap-8 items-center'>
-          <button onClick={handleBackButtonClick}><img
+          <button onClick={()=>handleBackButtonClick()}><img
             className='w-16'
             src='https://cdn-icons-gif.flaticon.com/16046/16046459.gif'
             alt='Album cover'

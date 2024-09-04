@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import ImageList from './ImageList';
 import AlbumForm from './AlbumForm';
 
-const AlbumList = ({ allAlbums, addAlbum, updatePeronalAlbum ,deleteImage}) => {
+const AlbumList = ({ allAlbums, addAlbum, updatePeronalAlbum, deleteImage }) => {
     const [selectedAlbum, setSelectedAlbum] = useState(null);
     const [isVisible, setIsVisible] = useState(false);
     console.log("qllqlbum", allAlbums);
@@ -17,7 +17,7 @@ const AlbumList = ({ allAlbums, addAlbum, updatePeronalAlbum ,deleteImage}) => {
     if (selectedAlbum) {
         return (
             <div>
-                <ImageList personalImageAlbum={selectedAlbum} updatePeronalAlbum={updatePeronalAlbum}  deleteImage={deleteImage} />
+                <ImageList personalImageAlbum={selectedAlbum} updatePeronalAlbum={updatePeronalAlbum} deleteImage={deleteImage} />
             </div>
         );
     }
@@ -46,6 +46,8 @@ const AlbumList = ({ allAlbums, addAlbum, updatePeronalAlbum ,deleteImage}) => {
                     </div>
                 </div>
             </div>
+
+
             <div className='px-10 py-10'>
                 <div className='flex flex-wrap gap-14'>
                     {allAlbums.map((data, i) => (
@@ -55,15 +57,15 @@ const AlbumList = ({ allAlbums, addAlbum, updatePeronalAlbum ,deleteImage}) => {
                             className="max-w-sm rounded overflow-hidden shadow-lg hover:shadow-2xl cursor-pointer"
                         >
                             <img
-                                className="w-44"
-                                src={(data.imageArray1) ?(data.imageArray1.length>0)?
-                                     data.imageArray1[0].imageUrl : 
-                                     "https://cdn-icons-gif.flaticon.com/14204/14204933.gif"
-                                     :"https://cdn-icons-gif.flaticon.com/14204/14204933.gif"
-                                    }
+                                className="w-full h-44 object-cover"
+                                src={(data.imageArray1) ? (data.imageArray1.length > 0) ?
+                                    data.imageArray1[0].imageUrl :
+                                    "https://cdn-icons-gif.flaticon.com/14204/14204933.gif"
+                                    : "https://cdn-icons-gif.flaticon.com/14204/14204933.gif"
+                                }
                                 alt="album image"
                             />
-                            <h2>{data.albumName}</h2>
+                            <h2 className='text-xl font-semibold py-2 pl-4'>{data.albumName}</h2>
                         </div>
                     ))}
                 </div>
