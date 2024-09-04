@@ -1,29 +1,36 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react';
+import Carousel from "./Carousel"
+
 import ImageForm from './ImageForm';
-import carousel from './carousel';
+
+
 import AlbumList from './AlbumList';
 import App from '../App';
 const ImageList = ({ personalImageAlbum, updatePeronalAlbum }) => {
   const [isImageFormVisible, setIsImageFormVisible] = useState(false);
   const [currentHoverIndex, setCurrentHoverIndex] = useState(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(null); // Track the image data to be edited
+  const [isCarouselActive, setIsCarouselActive] = useState(false);
 
-  // useEffect(() => {
 
-  // }, personalImageAlbum)
 
   const togglePopup = () => {
     setIsImageFormVisible(!isImageFormVisible);
+    setCurrentImageIndex(null)
   };
 
   const handleBackButtonClick = () => {
     // console.log("Back button clicked");
+    window.history.go(-1);
 
-    // window.history.go(-1);
-    return (
-      <App />
-    )
   };
+
+  const handleCrousel = (i) => {
+    setIsCarouselActive(true)
+    setCurrentImageIndex(i);
+
+  }
 
   const deleteImageLocal = (i) => {
     personalImageAlbum.imageArray1.splice(i, 1);
@@ -31,15 +38,26 @@ const ImageList = ({ personalImageAlbum, updatePeronalAlbum }) => {
   }
 
   const editImageLocal = (i) => {
+    setCurrentImageIndex(i); // Set image data to be edited
     setIsImageFormVisible(true);
-  }
+  };
+
   console.log("inside ImageList personalImageAlbum: ", personalImageAlbum);
 
   return (
     <>
 
-      {isImageFormVisible && <ImageForm images={personalImageAlbum} setIsImageFormVisible={setIsImageFormVisible} updatePeronalAlbum={updatePeronalAlbum} />}
+      {isImageFormVisible &&
+        <ImageForm
+          currentImageIndex={currentImageIndex}
+          images={personalImageAlbum}
+          setIsImageFormVisible={setIsImageFormVisible}
+          updatePeronalAlbum={updatePeronalAlbum}
+        />}
 
+      {
+        isCarouselActive && <Carousel personalImageAlbum={personalImageAlbum} currentImageIndex={currentImageIndex} setIsCarouselActive={setIsCarouselActive} />
+      }
       <div className="flex justify-around mt-4 items-center">
         <div className='inline-flex gap-8 items-center'>
           <button onClick={handleBackButtonClick}><img
@@ -79,35 +97,50 @@ const ImageList = ({ personalImageAlbum, updatePeronalAlbum }) => {
                   {personalImageAlbum.imageArray1.map((data, i) => (
                     <div
                       key={i}
-                      // onClick={() => handleAlbumClick(data)}
-                      className="max-w-sm rounded overflow-hidden shadow-lg hover:shadow-2xl hover:bg-white cursor-pointer"
-                      onMouseOver={() => {
-                        setCurrentHoverIndex(i);
-                      }}
-                      onMouseLeave={() => {
-                        setCurrentHoverIndex(null);
-                      }}
+                      className="relative max-w-sm rounded overflow-hidden shadow-lg hover:shadow-2xl hover:bg-white cursor-pointer"
+                      onMouseOver={() => setCurrentHoverIndex(i)}
+                      onMouseLeave={() => setCurrentHoverIndex(null)}
+
                     >
                       <img
-                        className="w-60"
+                        className="w-full h-auto object-cover"
                         src={data.imageUrl}
                         alt="album image"
+                        onClick={() => handleCrousel(i)}
                       />
-                      <div className='flex justify-between items-center gap-4'>
-                        <h2 className='text-2xl font-semibold ml-4'>{data.imageTitle}</h2>
-                        {(currentHoverIndex === i) ?
-                          <div className='flex gap-2'>
-                            <button className='w-10 ' onClick={()=>editImageLocal(i)}>
-                              <img src="https://cdn-icons-gif.flaticon.com/8800/8800862.gif" height="100%" alt="Edit" />
-                            </button>
-                            <button onClick={() => deleteImageLocal(i)} className='w-10'>
-                              <img src="https://cdn-icons-gif.flaticon.com/15164/15164888.gif" height="100%" alt="Delete" />
-                            </button>
-                          </div> : <></>}
+                      {currentHoverIndex === i && (
+                        <div className="absolute bottom-2 right-2 bg-white bg-opacity-75 p-2 rounded-lg flex gap-2">
+                          <button
+                            className="w-10 h-10 "
+                            onClick={() => editImageLocal(i)}
+
+                          >
+                            <img
+                              src="https://cdn-icons-gif.flaticon.com/8800/8800862.gif"
+                              className="w-full h-full object-cover"
+                              alt="Edit"
+                            />
+                          </button>
+                          <button
+                            className="w-10 h-10"
+                            onClick={() => deleteImageLocal(i)}
+                          >
+                            <img
+                              src="https://cdn-icons-gif.flaticon.com/15164/15164888.gif"
+                              className="w-full h-full object-cover"
+                              alt="Delete"
+
+                            />
+                          </button>
+                        </div>
+                      )}
+                      <div className='flex justify-between items-center gap-4 p-4'>
+                        <h2 className='text-2xl font-semibold'>{data.imageTitle}</h2>
                       </div>
                     </div>
                   ))}
                 </div>
+
               </div>
               :
               <div
